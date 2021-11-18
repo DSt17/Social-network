@@ -1,5 +1,8 @@
 import React from 'react';
-import {rerenderEntireThree} from "../Render";
+
+let rerenderEntireThree = () => {
+    console.log("state changed")
+}
 
 type MessageType = {
     id: number
@@ -21,7 +24,7 @@ export type ProfilePageType = {
 export type DialogPageType = {
     messages: Array<MessageType>
     dialogs: Array<DialogsType>
-    messageForNewMessage:string
+    messageForNewMessage: string
 }
 type SidebarType = {}
 export type stateType = {
@@ -32,56 +35,62 @@ export type stateType = {
 
 
 //BLL -------------------------------------------------------------------
+
 export let state: stateType = {
     profilePage: {
         messageForNewPost: "",
         posts: [
-            { id: 1, message: 'Hi, how are you?', likesCount: 12 },
-            { id: 2, message: 'it\'s my first post', likesCount: 11 },
-            { id: 3, message: 'Blabla', likesCount: 11 },
-            { id: 4, message: 'Data', likesCount: 11 },
+            {id: 1, message: 'Hi, how are you?', likesCount: 12},
+            {id: 2, message: 'it\'s my first post', likesCount: 11},
+            {id: 3, message: 'Blabla', likesCount: 11},
+            {id: 4, message: 'Data', likesCount: 11},
         ],
     },
     dialogsPage: {
         messageForNewMessage: "",
         messages: [
-            { id: 1, message: 'Hi' },
-            { id: 2, message: 'How is your it-kamasutra?' },
-            { id: 3, message: 'Yo' },
-            { id: 4, message: 'Yo' },
-            { id: 5, message: 'Yo' },
+            {id: 1, message: 'Hi'},
+            {id: 2, message: 'How is your it-kamasutra?'},
+            {id: 3, message: 'Yo'},
+            {id: 4, message: 'Yo'},
+            {id: 5, message: 'Yo'},
         ],
         dialogs: [
-            { id: 1, name: 'Dimych' },
-            { id: 2, name: 'Andrew' },
-            { id: 3, name: 'Sveta' },
-            { id: 4, name: 'Sacha' },
-            { id: 5, name: 'Viktor' },
-            { id: 6, name: 'Valera' }
+            {id: 1, name: 'Dimych'},
+            {id: 2, name: 'Andrew'},
+            {id: 3, name: 'Sveta'},
+            {id: 4, name: 'Sacha'},
+            {id: 5, name: 'Viktor'},
+            {id: 6, name: 'Valera'}
         ]
     },
     sidebar: {}
 }
 
 export const addPost = (postMessage: string) => {
-    const newPost:PostType = {id: new Date().getTime() , message: postMessage, likesCount: 0}
+    const newPost: PostType = {id: new Date().getTime(), message: postMessage, likesCount: 0}
     state.profilePage.posts.push(newPost)
-    rerenderEntireThree(state)
+    rerenderEntireThree()
 }
 
-export const addMessage = (message:string) =>{
-    const newMessage:MessageType =  { id: new Date().getTime(), message:message }
+export const addMessage = (message: string) => {
+    const newMessage: MessageType = {id: new Date().getTime(), message: message}
     state.dialogsPage.messages.push(newMessage)
-    rerenderEntireThree(state)
+    rerenderEntireThree()
 }
 
-export const ChangeNewMessageCallback = (NewMessage:string) => {
+export const ChangeNewMessageCallback = (NewMessage: string) => {
     state.dialogsPage.messageForNewMessage = NewMessage
-    rerenderEntireThree(state)
+    rerenderEntireThree()
 }
-export const ChangeNewTextCallback = (NewText:string) => {
-state.profilePage.messageForNewPost = NewText;
-rerenderEntireThree(state)
+export const ChangeNewTextCallback = (NewText: string) => {
+    state.profilePage.messageForNewPost = NewText;
+    rerenderEntireThree()
+}
+//СОЗДАЛИ ФУНКЦИЮ ДЛЯ ТОГО ЧТОБЫ ИЗ INDEX.TSX ПЕРЕДАТЬ rerenderEntireThree
+//СМОТРЕТЬ В СВЯЗКЕ С ФАЙЛОМ INDEX.TSX (В ФУНКЦИЮ ПЕРЕДАЕМ ФУНКЦИЮ)
+export const subscribe = (observer: () => void) => {
+    rerenderEntireThree = observer //это паттерн НАБЛЮДАТЕЛЬ (observer)
 }
 
 export default state;
