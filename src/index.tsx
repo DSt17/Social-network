@@ -1,21 +1,18 @@
 import React from 'react';
 import reportWebVitals from './reportWebVitals';
-import state, {subscribe} from "./redux/state";
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {addMessage, addPost, ChangeNewMessageCallback, ChangeNewTextCallback, stateType} from "./redux/state";
+import {store} from "./redux/state";
 import {BrowserRouter} from "react-router-dom";
 
 //Функция перерисовать все дерево
  let rerenderEntireThree = () => {
     ReactDOM.render(
         <BrowserRouter>
-            <App state = {state}
-                 addPost={ addPost}
-                 addMessage={addMessage}
-                 ChangeNewMessageCallback={ChangeNewMessageCallback}
-                 ChangeNewTextCallback={ChangeNewTextCallback}
+            <App
+                 state = {store.getState()}
+                 dispatch ={store.dispatch.bind(store)}
             />
         </BrowserRouter>,document.getElementById('root')
     );
@@ -25,7 +22,7 @@ rerenderEntireThree()
 
 
 //функция колбек (В ФУНКЦИЮ ПЕРЕДАЕМ ФУНКЦИЮ)вызвали функцию из state.tsx для передачи rerenderEntireThree чтобы там ее кто-то вызвал
-subscribe(rerenderEntireThree)
+store.subscribe(rerenderEntireThree)
 
 
 

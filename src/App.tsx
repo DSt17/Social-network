@@ -7,16 +7,18 @@ import Dialogs from "./Components/Dialogs/Dialogs";
 import Setting from './Components/Settings/Settings';
 import News from './Components/News/News';
 import Music from './Components/Music/Musi';
-import {addMessage, addPost, ChangeNewMessageCallback, ChangeNewTextCallback, stateType} from "./redux/state";
 import {Route} from 'react-router-dom';
+import {ActionsTypes, StateType, store, StoreType} from "./redux/state";
 
 type AppPropsType = {
-    state: stateType
-    addPost: (postMessage: string) => void
-    addMessage:(message:string)=>void
-    ChangeNewMessageCallback:(NewMessage:string) => void
-    ChangeNewTextCallback:(NewText:string)=>void
+    state: StateType
+
+   /* addPost: (postMessage: string) => void
+    ChangeNewTextCallback: (NewText: string) => void
+    addMessage: (postMessage: string) => void*/
+    dispatch: (action: ActionsTypes) => void
 }
+
 const App = (props: AppPropsType) => {
     return (
         <div className="app-wrapper">
@@ -25,16 +27,15 @@ const App = (props: AppPropsType) => {
             <div className="app-wrapper-content">
                 <Route path={'/dialogs'} render={() =>
                     <Dialogs
-                        state={props.state.dialogsPage}
+                        state={props.state}
                         messagesTextereaValue={props.state.dialogsPage.messageForNewMessage} //ПЕРЕДАЕМ ССЫЛКУ НА ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ВВОДА (Texterea)
-                        addMessage={props.addMessage}
-                        ChangeNewMessageCallback={ChangeNewMessageCallback}/>}/>
+                        dispatch={props.dispatch} /> }/>
                 <Route path={'/profile'} render={() =>
                     <Profile
                         state={props.state.profilePage}
                         message={props.state.profilePage.messageForNewPost}
-                        addPostCallback={props.addPost}
-                        ChangeNewTextCallback={ChangeNewTextCallback}/>}/>
+                        dispatch={props.dispatch}
+                    />}/>
                 <Route path={'/news'} render={() => <News/>}/>
                 <Route path={'/music'} render={() => <Music/>}/>
                 <Route path={'/settings'} render={() => <Setting/>}/>

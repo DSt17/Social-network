@@ -1,9 +1,5 @@
 import React from 'react';
 
-let rerenderEntireThree = () => {
-    console.log("state changed")
-}
-
 type MessageType = {
     id: number
     message: string
@@ -26,71 +22,124 @@ export type DialogPageType = {
     dialogs: Array<DialogsType>
     messageForNewMessage: string
 }
-type SidebarType = {}
-export type stateType = {
-    profilePage: ProfilePageType
-    dialogsPage: DialogPageType
-    sidebar: SidebarType
-}
-
-
-//BLL -------------------------------------------------------------------
-
-export let state: stateType = {
+export type StateType = {
     profilePage: {
-        messageForNewPost: "",
-        posts: [
-            {id: 1, message: 'Hi, how are you?', likesCount: 12},
-            {id: 2, message: 'it\'s my first post', likesCount: 11},
-            {id: 3, message: 'Blabla', likesCount: 11},
-            {id: 4, message: 'Data', likesCount: 11},
-        ],
-    },
+        messageForNewPost: string,
+        posts: { id: number, message: string, likesCount: number }[],
+    }
     dialogsPage: {
-        messageForNewMessage: "",
-        messages: [
-            {id: 1, message: 'Hi'},
-            {id: 2, message: 'How is your it-kamasutra?'},
-            {id: 3, message: 'Yo'},
-            {id: 4, message: 'Yo'},
-            {id: 5, message: 'Yo'},
-        ],
-        dialogs: [
-            {id: 1, name: 'Dimych'},
-            {id: 2, name: 'Andrew'},
-            {id: 3, name: 'Sveta'},
-            {id: 4, name: 'Sacha'},
-            {id: 5, name: 'Viktor'},
-            {id: 6, name: 'Valera'}
-        ]
-    },
+        messageForNewMessage: string,
+        messages: { id: number, message: string }[],
+        dialogs: { id: number, name: string }[],
+    }
     sidebar: {}
 }
-
-export const addPost = (postMessage: string) => {
-    const newPost: PostType = {id: new Date().getTime(), message: postMessage, likesCount: 0}
-    state.profilePage.posts.push(newPost)
-    rerenderEntireThree()
+export type StoreType = {
+    _state: StateType
+    getState: () => StateType
+    _callSubscriber: () => void
+    subscribe: (observer: () => void) => void
+    dispatch: (action: ActionsTypes) => void
 }
 
-export const addMessage = (message: string) => {
-    const newMessage: MessageType = {id: new Date().getTime(), message: message}
-    state.dialogsPage.messages.push(newMessage)
-    rerenderEntireThree()
+export type ActionsTypes =  ReturnType<typeof addPostActionCreator> |
+                            ReturnType<typeof ChangeNewTextCallbackActionCreator> |
+                            ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
+                            ReturnType<typeof addMessageActionCreator>
+
+
+
+//-----------ACTION CREATOR--------
+export const addPostActionCreator = (postMessage: string) => {
+    return {
+        type: "ADD-POST",
+        postMessage:postMessage
+    } as const
+}
+export const ChangeNewMessageCallbackActionCreator = (NewMessage: string) => {
+    return {
+        type: "CHANGE-NEW-MESSAGE-CALLBACK",
+        NewMessage: NewMessage
+    } as const
+}
+export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
+    return {
+        type: "CHANGE-NEW-TEXT-CALLBACK",
+        NewText: NewText
+    } as const
+}
+export const addMessageActionCreator = (message: string) => {
+    return {
+        type: "ADD-MESSAGE",
+        message: message
+    } as const
 }
 
-export const ChangeNewMessageCallback = (NewMessage: string) => {
-    state.dialogsPage.messageForNewMessage = NewMessage
-    rerenderEntireThree()
-}
-export const ChangeNewTextCallback = (NewText: string) => {
-    state.profilePage.messageForNewPost = NewText;
-    rerenderEntireThree()
-}
-//СОЗДАЛИ ФУНКЦИЮ ДЛЯ ТОГО ЧТОБЫ ИЗ INDEX.TSX ПЕРЕДАТЬ rerenderEntireThree
-//СМОТРЕТЬ В СВЯЗКЕ С ФАЙЛОМ INDEX.TSX (В ФУНКЦИЮ ПЕРЕДАЕМ ФУНКЦИЮ)
-export const subscribe = (observer: () => void) => {
-    rerenderEntireThree = observer //это паттерн НАБЛЮДАТЕЛЬ (observer)
+
+//-------BLL ------------------------------------------------------
+export let store: StoreType = {
+    _state: {
+        profilePage: {
+            messageForNewPost: "",
+            posts: [
+                {id: 1, message: 'Hi, how are you?', likesCount: 12},
+                {id: 2, message: 'it\'s my first post', likesCount: 11},
+                {id: 3, message: 'Blabla', likesCount: 11},
+                {id: 4, message: 'Data', likesCount: 11},
+            ],
+        },
+        dialogsPage: {
+            messageForNewMessage: "",
+            messages: [
+                {id: 1, message: 'Hi'},
+                {id: 2, message: 'How is your it-kamasutra?'},
+                {id: 3, message: 'Yo'},
+                {id: 4, message: 'Yo'},
+                {id: 5, message: 'Yo'},
+            ],
+            dialogs: [
+                {id: 1, name: 'Dimych'},
+                {id: 2, name: 'Andrew'},
+                {id: 3, name: 'Sveta'},
+                {id: 4, name: 'Sacha'},
+                {id: 5, name: 'Viktor'},
+                {id: 6, name: 'Valera'}
+            ]
+        },
+        sidebar: {}
+    },
+    _callSubscriber() {
+        console.log("state changed")
+    },
+    getState() {
+        return this._state
+    },
+    subscribe(observer: () => void) {
+        this._callSubscriber = observer //это паттерн НАБЛЮДАТЕЛЬ (observer)
+    },
+
+    dispatch(action) {     //[type: 'ADD-POST']
+        if (action.type === "ADD-POST") {
+            let newPost: PostType = {id: new Date().getTime(), message: action.postMessage, likesCount: 0}
+            this._state.profilePage.posts.push(newPost)
+            this._callSubscriber()
+        } else if (action.type === "CHANGE-NEW-TEXT-CALLBACK") {
+            this._state.profilePage.messageForNewPost = action.NewText;
+            this._callSubscriber()
+        } else if (action.type === "CHANGE-NEW-MESSAGE-CALLBACK") {
+            this._state.dialogsPage.messageForNewMessage = action.NewMessage
+            this._callSubscriber()
+        } else if (action.type === "ADD-MESSAGE") {
+            let newMessage: MessageType = {id: new Date().getTime(), message: action.message}
+            this._state.dialogsPage.messages.push(newMessage)
+            this._callSubscriber()
+        }
+    },
 }
 
-export default state;
+
+
+
+
+
+
