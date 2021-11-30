@@ -1,10 +1,13 @@
 import React from 'react';
+import profilePageReducer, { addPostActionCreator, ChangeNewTextCallbackActionCreator } from "./profilePage-reducer";
+import dialogsPageReducer, {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
+import sidebarReducer from "./sidebar-reducer";
 
-type MessageType = {
+export type MessageType = {
     id: number
     message: string
 }
-type DialogsType = {
+export type DialogsType = {
     id: number
     name: string
 }
@@ -49,33 +52,6 @@ export type ActionsTypes =  ReturnType<typeof addPostActionCreator> |
 
 
 
-//-----------ACTION CREATOR--------
-export const addPostActionCreator = (postMessage: string) => {
-    return {
-        type: "ADD-POST",
-        postMessage:postMessage
-    } as const
-}
-export const ChangeNewMessageCallbackActionCreator = (NewMessage: string) => {
-    return {
-        type: "CHANGE-NEW-MESSAGE-CALLBACK",
-        NewMessage: NewMessage
-    } as const
-}
-export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
-    return {
-        type: "CHANGE-NEW-TEXT-CALLBACK",
-        NewText: NewText
-    } as const
-}
-export const addMessageActionCreator = (message: string) => {
-    return {
-        type: "ADD-MESSAGE",
-        message: message
-    } as const
-}
-
-
 //-------BLL ------------------------------------------------------
 export let store: StoreType = {
     _state: {
@@ -118,23 +94,14 @@ export let store: StoreType = {
         this._callSubscriber = observer //это паттерн НАБЛЮДАТЕЛЬ (observer)
     },
 
-    dispatch(action) {     //[type: 'ADD-POST']
-        if (action.type === "ADD-POST") {
-            let newPost: PostType = {id: new Date().getTime(), message: action.postMessage, likesCount: 0}
-            this._state.profilePage.posts.push(newPost)
-            this._callSubscriber()
-        } else if (action.type === "CHANGE-NEW-TEXT-CALLBACK") {
-            this._state.profilePage.messageForNewPost = action.NewText;
-            this._callSubscriber()
-        } else if (action.type === "CHANGE-NEW-MESSAGE-CALLBACK") {
-            this._state.dialogsPage.messageForNewMessage = action.NewMessage
-            this._callSubscriber()
-        } else if (action.type === "ADD-MESSAGE") {
-            let newMessage: MessageType = {id: new Date().getTime(), message: action.message}
-            this._state.dialogsPage.messages.push(newMessage)
-            this._callSubscriber()
-        }
-    },
+
+    dispatch(action) {
+        this._state.profilePage = profilePageReducer(this._state.profilePage, action);
+        this._state.dialogsPage = dialogsPageReducer(this._state.dialogsPage, action);
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action);
+
+        this._callSubscriber()
+    }
 }
 
 

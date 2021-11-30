@@ -13,9 +13,7 @@ import {ActionsTypes, StateType, store, StoreType} from "./redux/state";
 type AppPropsType = {
     state: StateType
 
-   /* addPost: (postMessage: string) => void
-    ChangeNewTextCallback: (NewText: string) => void
-    addMessage: (postMessage: string) => void*/
+
     dispatch: (action: ActionsTypes) => void
 }
 

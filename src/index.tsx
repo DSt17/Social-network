@@ -20,7 +20,6 @@ import {BrowserRouter} from "react-router-dom";
 
 rerenderEntireThree()
 
-
 //функция колбек (В ФУНКЦИЮ ПЕРЕДАЕМ ФУНКЦИЮ)вызвали функцию из state.tsx для передачи rerenderEntireThree чтобы там ее кто-то вызвал
 store.subscribe(rerenderEntireThree)
 
