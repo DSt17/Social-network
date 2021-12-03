@@ -1,4 +1,4 @@
-import {ActionsTypes, PostType, ProfilePageType,} from "./state";
+import {ActionsTypes, PostType, ProfilePageType,} from "./store";
 
 //-----------ACTION CREATOR-------- ФУНКЦИЯ КОТОРАЯ УПАКОВЫВАЕТ ДЛЯ НАС ACTION
 export const addPostActionCreator = (postMessage: string) => {
@@ -14,8 +14,18 @@ export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
     } as const
 }
 
+let initialState = {
+    messageForNewPost: "",
+    posts: [
+        {id: 1, message: 'Hi, how are you?', likesCount: 12},
+        {id: 2, message: 'it\'s my first post', likesCount: 11},
+        {id: 3, message: 'Blabla', likesCount: 11},
+        {id: 4, message: 'Data', likesCount: 11},
+    ]
+}
 
-const profilePageReducer = (state: ProfilePageType, action: ActionsTypes) => {
+//ЕСЛИ СТЕЙТ НЕ ПРИХОДИТ В REDUCER, ИСПОЛЬЗУЕМ ПЕРВОНОЧАЛЬНЫЕ ДАННЫЕ... initialState
+const profilePageReducer = (state: ProfilePageType = initialState, action: ActionsTypes) => {
     switch (action.type){
         case "ADD-POST":
             let newPost: PostType = {id: new Date().getTime(), message: action.postMessage, likesCount: 0}

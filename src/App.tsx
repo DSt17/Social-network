@@ -8,16 +8,15 @@ import Setting from './Components/Settings/Settings';
 import News from './Components/News/News';
 import Music from './Components/Music/Musi';
 import {Route} from 'react-router-dom';
-import {ActionsTypes, StateType, store, StoreType} from "./redux/state";
+import {ActionsTypes, StateType} from "./redux/store";
 
 type AppPropsType = {
     state: StateType
-
-
-    dispatch: (action: ActionsTypes) => void
+    dispatch: (action: ActionsTypes  ) => void
 }
 
 const App = (props: AppPropsType) => {
+
     return (
         <div className="app-wrapper">
             <Header/>
@@ -26,7 +25,7 @@ const App = (props: AppPropsType) => {
                 <Route path={'/dialogs'} render={() =>
                     <Dialogs
                         state={props.state}
-                        messagesTextereaValue={props.state.dialogsPage.messageForNewMessage} //ПЕРЕДАЕМ ССЫЛКУ НА ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ВВОДА (Texterea)
+                        messagesTextereaValue={props.state.dialogsPage.messageForNewMessage}
                         dispatch={props.dispatch} /> }/>
                 <Route path={'/profile'} render={() =>
                     <Profile

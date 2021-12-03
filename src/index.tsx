@@ -3,25 +3,29 @@ import reportWebVitals from './reportWebVitals';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {store} from "./redux/state";
-import {BrowserRouter} from "react-router-dom";
 
-//Функция перерисовать все дерево
- let rerenderEntireThree = () => {
+import {BrowserRouter} from "react-router-dom";
+import store from './redux/redux-store';
+import {StateType} from "./redux/store";
+
+
+ let rerenderEntireThree = (state:StateType) => {
     ReactDOM.render(
         <BrowserRouter>
             <App
-                 state = {store.getState()}
+                 state = {state}
                  dispatch ={store.dispatch.bind(store)}
             />
         </BrowserRouter>,document.getElementById('root')
     );
 }
 
-rerenderEntireThree()
+rerenderEntireThree(store.getState())
 
-//функция колбек (В ФУНКЦИЮ ПЕРЕДАЕМ ФУНКЦИЮ)вызвали функцию из state.tsx для передачи rerenderEntireThree чтобы там ее кто-то вызвал
-store.subscribe(rerenderEntireThree)
+store.subscribe( () => {
+    let state = store.getState()
+    rerenderEntireThree(state)
+})
 
 
 
