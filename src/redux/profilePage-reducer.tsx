@@ -25,6 +25,7 @@ let initialState = {
 }
 
 //ЕСЛИ СТЕЙТ НЕ ПРИХОДИТ В REDUCER, ИСПОЛЬЗУЕМ ПЕРВОНОЧАЛЬНЫЕ ДАННЫЕ... initialState
+
 const profilePageReducer = (state: ProfilePageType = initialState, action: ActionsTypes) => {
     switch (action.type){
         case "ADD-POST":

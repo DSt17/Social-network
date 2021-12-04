@@ -2,30 +2,32 @@ import React, {ChangeEvent} from "react";
 import s from './Dialogs.module.css'
 import Dialogsitem from "./Dialogitem/Dialogsitem";
 import Message from "./Message/Message";
-import {
-    ActionsTypes,
-    StateType
-} from "../../redux/store";
-import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "../../redux/dialogsPage-reducer";
+import {DialogPageType, StateType} from "../../redux/store";
 
 type DialogsPropsType = {
-    state: StateType
-    messagesTextereaValue: string
-    dispatch: (action: ActionsTypes) => void
-
+    state: DialogPageType
+    addMessage: () => void
+    newMessageChangeHandler: (text: string) => void
+    messagesTextareaValue: string
 }
 
 const Dialogs = (props: DialogsPropsType) => {
-    let dialogsElements = props.state.dialogsPage.dialogs.map(d => <Dialogsitem name={d.name} id={d.id}/>)
-    let messagesElements = props.state.dialogsPage.messages.map(m => <Message message={m.message}/>)
 
-    let addMessage = () => {
-        props.dispatch(addMessageActionCreator(props.messagesTextereaValue)) // ПУШИТ В МАССИВ СООБЩЕНИЙ НОВОЕ СООБЩЕНИЕ
-        props.dispatch(ChangeNewMessageCallbackActionCreator("")) // МЕНЯЕТ ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ НА ПУСТУЮ СТРОКУ
+    let state = props.state
+
+    let dialogsElements = state.dialogs.map(d => <Dialogsitem name={d.name} id={d.id}/>)
+    let messagesElements = state.messages.map(m => <Message message={m.message}/>)
+
+    const OnAddMessage = () => {
+        props.addMessage()
     }
-    const newMessageChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => { // МЕНЯЕМ ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ НА ТЕКУЩЕЕ ЗНАЧЕНИЕ ВВОДА
-        props.dispatch(ChangeNewMessageCallbackActionCreator(e.currentTarget.value))
+    // МЕНЯЕМ ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ НА ТЕКУЩЕЕ ЗНАЧЕНИЕ ВВОДА
+    const AddNewMessageChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let text = e.currentTarget.value
+        props.newMessageChangeHandler(text)
     }
+
+
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
@@ -37,13 +39,13 @@ const Dialogs = (props: DialogsPropsType) => {
                 </div>
                 <div>
                     <textarea
-                        value={props.messagesTextereaValue} //ПРИХОДИТ ССЫЛКА НА ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ВВОДА => ""
-                        onChange={newMessageChangeHandler}
+                        value={props.messagesTextareaValue} //ПРИХОДИТ ССЫЛКА НА ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ВВОДА => ""
+                        onChange={AddNewMessageChangeHandler}
                         placeholder={"Enter your message"}
                     ></textarea>
                 </div>
                 <div>
-                    <button onClick={addMessage}>Add message</button>
+                    <button onClick={OnAddMessage}>Add message</button>
                 </div>
             </div>
         </div>
