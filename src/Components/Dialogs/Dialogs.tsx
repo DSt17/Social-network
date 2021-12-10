@@ -2,31 +2,27 @@ import React, {ChangeEvent} from "react";
 import s from './Dialogs.module.css'
 import Dialogsitem from "./Dialogitem/Dialogsitem";
 import Message from "./Message/Message";
-import {DialogPageType, StateType} from "../../redux/store";
+import {DialogsPropsType} from "./DialogsContainer";
 
-type DialogsPropsType = {
-    state: DialogPageType
-    addMessage: () => void
-    newMessageChangeHandler: (text: string) => void
-    messagesTextareaValue: string
-}
+
 
 const Dialogs = (props: DialogsPropsType) => {
 
-    let state = props.state
+    let state = props.dialogsPage
 
     let dialogsElements = state.dialogs.map(d => <Dialogsitem name={d.name} id={d.id}/>)
     let messagesElements = state.messages.map(m => <Message message={m.message}/>)
 
     const OnAddMessage = () => {
-        props.addMessage()
+        if(state.messageForNewMessage.trim() !== ""){
+            props.addMessage()
+        }
+
     }
     // МЕНЯЕМ ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ НА ТЕКУЩЕЕ ЗНАЧЕНИЕ ВВОДА
     const AddNewMessageChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        let text = e.currentTarget.value
-        props.newMessageChangeHandler(text)
+        props.newMessageChangeHandler(e.currentTarget.value)
     }
-
 
     return (
         <div className={s.dialogs}>
@@ -39,7 +35,7 @@ const Dialogs = (props: DialogsPropsType) => {
                 </div>
                 <div>
                     <textarea
-                        value={props.messagesTextareaValue} //ПРИХОДИТ ССЫЛКА НА ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ВВОДА => ""
+                        value={state.messageForNewMessage}
                         onChange={AddNewMessageChangeHandler}
                         placeholder={"Enter your message"}
                     ></textarea>

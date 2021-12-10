@@ -8,14 +8,15 @@ import Setting from './Components/Settings/Settings';
 import News from './Components/News/News';
 import Music from './Components/Music/Musi';
 import {Route} from 'react-router-dom';
-import {ActionsTypes, StateType, StoreType} from "./redux/store";
 import DialogsContainer from './Components/Dialogs/DialogsContainer';
+import Users from './Components/Users/Users';
+import UsersContainer from './Components/Users/UsersContainer';
 
-type AppPropsType = {
-    store: StoreType
-}
 
-const App = (props: AppPropsType) => {
+
+type AppPropsType = {}
+
+const App = () => {
 
     return (
         <div className="app-wrapper">
@@ -23,13 +24,12 @@ const App = (props: AppPropsType) => {
             <Navbar/>
             <div className="app-wrapper-content">
                 <Route path={'/dialogs'} render={() =>
-                    <DialogsContainer
-                        store={props.store}
-                    />}/>
+                    <DialogsContainer/>}/>
                 <Route path={'/profile'} render={() =>
-                    <Profile
-                        store={props.store}
-                    />}/>
+                    <Profile/>}/>
+                <Route path={'/users'} render={ () => <UsersContainer /> } />
+
+
                 <Route path={'/news'} render={() => <News/>}/>
                 <Route path={'/music'} render={() => <Music/>}/>
                 <Route path={'/settings'} render={() => <Setting/>}/>

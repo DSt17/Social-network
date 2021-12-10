@@ -1,34 +1,42 @@
-import React from "react";
-import {StoreType} from "../../redux/store";
-import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "../../redux/dialogsPage-reducer";
+
+import {
+    addMessageActionCreator,
+    ChangeNewMessageCallbackActionCreator,
+    DialogPageType,
+} from "../../redux/dialogsPage-reducer";
 import Dialogs from "./Dialogs";
+import {connect} from "react-redux";
+import {AppStateType} from "../../redux/redux-store";
+import {Dispatch} from "redux";
 
-type DialogsContainersPropsType = {
-    store: StoreType
+
+export type DialogsPropsType = mapStateToPropsType & mapDispatchToPropsType
+
+type mapStateToPropsType = {
+    dialogsPage: DialogPageType
+}
+let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
+    return {
+        dialogsPage: state.dialogsPage
+    }
 }
 
-const DialogsContainer = (props: DialogsContainersPropsType) => {
-
-    let state = props.store.getState().dialogsPage
-
-    const addMessage = () => {
-        props.store.dispatch(addMessageActionCreator(state.messageForNewMessage)) // ПУШИТ В МАССИВ СООБЩЕНИЙ НОВОЕ СООБЩЕНИЕ
-        props.store.dispatch(ChangeNewMessageCallbackActionCreator("")) // МЕНЯЕТ ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ НА ПУСТУЮ СТРОКУ
-    }
-    // МЕНЯЕМ ИЗНАЧАЛЬНОЕ ЗНАЧЕНИЕ НА ТЕКУЩЕЕ ЗНАЧЕНИЕ ВВОДА
-    const newMessageChangeHandler = (text: string) => {
-        props.store.dispatch(ChangeNewMessageCallbackActionCreator(text))
-    }
-
-
-    return (
-        <Dialogs
-            state={state}
-            addMessage={addMessage}
-            newMessageChangeHandler={newMessageChangeHandler}
-            messagesTextareaValue={state.messageForNewMessage}
-        />
-    )
+type mapDispatchToPropsType = {
+    addMessage: () => void
+    newMessageChangeHandler: (text: string) => void
 }
+let mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
+    return {
+        addMessage: () => {
+            dispatch(addMessageActionCreator())
+        },
+        newMessageChangeHandler: (text: string) => {
+            dispatch(ChangeNewMessageCallbackActionCreator(text))
+        },
+    }
+}
+
+const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs)
+
 
 export default DialogsContainer;

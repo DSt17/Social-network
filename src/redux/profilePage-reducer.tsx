@@ -1,10 +1,24 @@
-import {ActionsTypes, PostType, ProfilePageType,} from "./store";
+import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
+
+type ActionsTypes =  ReturnType<typeof addPostActionCreator> |
+    ReturnType<typeof ChangeNewTextCallbackActionCreator> |
+    ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
+    ReturnType<typeof addMessageActionCreator>
+type PostType = {
+    id: number
+    message: string
+    likesCount: number
+}
+export type ProfilePageType = {
+    posts: Array<PostType>
+    messageForNewPost: string
+}
 
 //-----------ACTION CREATOR-------- ФУНКЦИЯ КОТОРАЯ УПАКОВЫВАЕТ ДЛЯ НАС ACTION
-export const addPostActionCreator = (postMessage: string) => {
+export const addPostActionCreator = () => {
     return {
-        type: "ADD-POST",
-        postMessage:postMessage
+        type: "ADD-POST"
+        // postMessage: postMessage
     } as const
 }
 export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
@@ -13,6 +27,7 @@ export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
         NewText: NewText
     } as const
 }
+
 
 let initialState = {
     messageForNewPost: "",
@@ -26,17 +41,17 @@ let initialState = {
 
 //ЕСЛИ СТЕЙТ НЕ ПРИХОДИТ В REDUCER, ИСПОЛЬЗУЕМ ПЕРВОНОЧАЛЬНЫЕ ДАННЫЕ... initialState
 
-const profilePageReducer = (state: ProfilePageType = initialState, action: ActionsTypes) => {
-    switch (action.type){
+const profilePageReducer = (state: ProfilePageType = initialState, action: ActionsTypes):ProfilePageType => {
+    switch (action.type) {
         case "ADD-POST":
-            let newPost: PostType = {id: new Date().getTime(), message: action.postMessage, likesCount: 0}
-            state.posts.push(newPost)
-            return state
-        case "CHANGE-NEW-TEXT-CALLBACK":  state.messageForNewPost = action.NewText;
-            return state
-
+            //ДЕЛАЕМ КОПИЮ СТЕЙТА ПРАВИЛО ИММУТАБЕЛЬНОСТИ,
+            let stateMessage = state.messageForNewPost
+            return {...state, posts: [...state.posts,{id: new Date().getTime(), message: stateMessage, likesCount: 0}],messageForNewPost:"" }
+        case "CHANGE-NEW-TEXT-CALLBACK":
+            return{...state,messageForNewPost:action.NewText}
         default:
             return state
+
     }
 
 }

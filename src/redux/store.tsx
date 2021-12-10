@@ -3,29 +3,29 @@ import  { addPostActionCreator, ChangeNewTextCallbackActionCreator } from "./pro
 import  {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
 
 
-export type MessageType = {
+ type MessageType = {
     id: number
     message: string
 }
-export type DialogsType = {
+ type DialogsType = {
     id: number
     name: string
 }
-export type PostType = {
+ type PostType = {
     id: number
     message: string
     likesCount: number
 }
-export type ProfilePageType = {
+ type ProfilePageType = {
     posts: Array<PostType>
     messageForNewPost: string
 }
-export type DialogPageType = {
+ type DialogPageType = {
     messages: Array<MessageType>
     dialogs: Array<DialogsType>
     messageForNewMessage: string
 }
-export type StateType = {
+ type StateType = {
     profilePage: {
         messageForNewPost: string,
         posts: { id: number, message: string, likesCount: number }[],
@@ -37,7 +37,7 @@ export type StateType = {
     }
     sidebar: {}
 }
-export type StoreType = {
+ type StoreType = {
     _state: StateType
     getState: () => StateType
     _callSubscriber: () => void
@@ -45,7 +45,7 @@ export type StoreType = {
     dispatch: (action: ActionsTypes) => void
 }
 
-export type ActionsTypes =  ReturnType<typeof addPostActionCreator> |
+ type ActionsTypes =  ReturnType<typeof addPostActionCreator> |
                             ReturnType<typeof ChangeNewTextCallbackActionCreator> |
                             ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
                             ReturnType<typeof addMessageActionCreator>

@@ -1,31 +1,39 @@
-import React from "react";
-import { StoreType} from "../../../redux/store";
+
 import {addPostActionCreator, ChangeNewTextCallbackActionCreator} from "../../../redux/profilePage-reducer";
 import MyPosts from "./MyPosts";
+import {connect} from "react-redux";
+import {AppStateType} from "../../../redux/redux-store";
+import {Dispatch} from "redux";
 
-type MyPostsContainerPropsType = {
-    store:StoreType
+
+export type MyPostPropsType = mapStateToPropsType & mapDispatchToPropsType
+
+type mapStateToPropsType = {
+    posts: { id: number, message: string, likesCount: number }[]
+    message: string
+}
+let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
+    return {
+        posts: state.profilePage.posts,
+        message: state.profilePage.messageForNewPost
+    }
 }
 
-const MyPostsContainer = (props: MyPostsContainerPropsType) => {
-
-   let state = props.store.getState()
-
-    const addPost = () => {
-        props.store.dispatch(addPostActionCreator(props.store.getState().profilePage.messageForNewPost) )
-        props.store.dispatch(ChangeNewTextCallbackActionCreator(""))
-    }
-    const ChangeNewTextCallback = (text: string) => {
-        props.store.dispatch(ChangeNewTextCallbackActionCreator(text))
-    }
-
-    return (
-        <MyPosts ChangeNewTextCallback={ChangeNewTextCallback}
-                 addPost={addPost}
-                 message={state.profilePage.messageForNewPost}
-                 posts={state.profilePage.posts}
-
-        />
-    )
+type mapDispatchToPropsType = {
+    addPost: () => void
+    ChangeNewTextCallback:(text:string) => void
 }
+let mapDispatchToProps = (dispatch: Dispatch):mapDispatchToPropsType => {
+    return {
+        addPost: () => {
+            dispatch(addPostActionCreator())
+        },
+        ChangeNewTextCallback: (text: string) => {
+            dispatch(ChangeNewTextCallbackActionCreator(text))
+        }
+    }
+}
+
+const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts)
+
 export default MyPostsContainer;

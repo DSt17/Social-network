@@ -1,4 +1,5 @@
-import {ActionsTypes} from "./store";
+import {ActionsTypes} from "./dialogsPage-reducer";
+
 
 let initialState = {}
 

@@ -1,10 +1,30 @@
-import {ActionsTypes, DialogPageType,  MessageType} from "./store";
+import {addPostActionCreator, ChangeNewTextCallbackActionCreator} from "./profilePage-reducer";
+
+
+type MessageType = {
+    id: number
+    message: string
+}
+type DialogsType = {
+    id: number
+    name: string
+}
+export type ActionsTypes = ReturnType<typeof addPostActionCreator> |
+    ReturnType<typeof ChangeNewTextCallbackActionCreator> |
+    ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
+    ReturnType<typeof addMessageActionCreator>
+
+export type DialogPageType = {
+    messages: Array<MessageType>
+    dialogs: Array<DialogsType>
+    messageForNewMessage: string
+}
+
 
 //-----------ACTION CREATOR-------- ФУНКЦИЯ КОТОРАЯ УПАКОВЫВАЕТ ДЛЯ НАС ACTION
-export const addMessageActionCreator = (message: string) => {
+export const addMessageActionCreator = () => {
     return {
         type: "ADD-MESSAGE",
-        message: message
     } as const
 }
 export const ChangeNewMessageCallbackActionCreator = (NewMessage: string) => {
@@ -14,8 +34,7 @@ export const ChangeNewMessageCallbackActionCreator = (NewMessage: string) => {
     } as const
 }
 
-
-let initialState = {
+let initialState: DialogPageType = {
     messageForNewMessage: "",
     messages: [
         {id: 1, message: 'Hi'},
@@ -34,17 +53,18 @@ let initialState = {
     ]
 }
 
- const dialogsPageReducer = (state:DialogPageType = initialState, action:ActionsTypes) => {
-     switch (action.type){
-         case "CHANGE-NEW-MESSAGE-CALLBACK":
-             state.messageForNewMessage = action.NewMessage
+const dialogsPageReducer = (state: DialogPageType = initialState, action: ActionsTypes):DialogPageType => {
+    switch (action.type) {
+        case "CHANGE-NEW-MESSAGE-CALLBACK":
+           return {...state,messageForNewMessage: action.NewMessage}
+        case "ADD-MESSAGE":
+            let body = state.messageForNewMessage
+            return {...state,
+                messageForNewMessage:"", messages:[...state.messages,{id: new Date().getTime(), message:body}],
+            }
+        default:
             return state
-         case "ADD-MESSAGE": let newMessage: MessageType = {id: new Date().getTime(), message: action.message}
-             state.messages.push(newMessage)
-             return state
-
-         default: return state
-     }
+    }
 }
 
 export default dialogsPageReducer
