@@ -11,7 +11,6 @@ type mapStateToPropsType = {
     users:Array<userType>
 }
 let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
-    debugger;
     return {
        users: state.usersPage.users
     }

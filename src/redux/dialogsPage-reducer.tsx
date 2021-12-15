@@ -53,14 +53,16 @@ let initialState: DialogPageType = {
     ]
 }
 
-const dialogsPageReducer = (state: DialogPageType = initialState, action: ActionsTypes):DialogPageType => {
+const dialogsPageReducer = (state: DialogPageType = initialState, action: ActionsTypes): DialogPageType => {
     switch (action.type) {
         case "CHANGE-NEW-MESSAGE-CALLBACK":
-           return {...state,messageForNewMessage: action.NewMessage}
+            return {...state, messageForNewMessage: action.NewMessage}
         case "ADD-MESSAGE":
             let body = state.messageForNewMessage
-            return {...state,
-                messageForNewMessage:"", messages:[...state.messages,{id: new Date().getTime(), message:body}],
+            return {
+                ...state,
+                messageForNewMessage: "",
+                messages: [...state.messages, {id: new Date().getTime(), message: body}],
             }
         default:
             return state
