@@ -10,8 +10,14 @@ const Dialogs = (props: DialogsPropsType) => {
 
     let state = props.dialogsPage
 
-    let dialogsElements = state.dialogs.map(d => <Dialogsitem name={d.name} id={d.id}/>)
-    let messagesElements = state.messages.map(m => <Message message={m.message}/>)
+    let dialogsElements = state.dialogs.map(d =>
+        <Dialogsitem
+        name={d.name}
+        id={d.id}/>)
+
+    let messagesElements = state.messages.map(m =>
+        <Message
+            message={m.message}/>)
 
     const OnAddMessage = () => {
         if(state.messageForNewMessage.trim() !== ""){

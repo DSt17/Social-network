@@ -3,3 +3,9 @@
     height: 130px;
     width: 130px;
 }
+.selectedPage{
+    font-weight: bold;
+}
+.small{
+ height: 100px;
+}
