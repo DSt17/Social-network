@@ -1,11 +1,11 @@
 
 export type ActionsTypes =
-    ReturnType<typeof followAC> |
-    ReturnType<typeof unfollowAC> |
-    ReturnType<typeof setUsersAC> |
-    ReturnType<typeof setCurrentPageAC>|
-    ReturnType<typeof toggleIsFetchingAC>|
-    ReturnType<typeof setTotalCountAC>
+    ReturnType<typeof follow> |
+    ReturnType<typeof unfollow> |
+    ReturnType<typeof setUsers> |
+    ReturnType<typeof setCurrentPage>|
+    ReturnType<typeof toggleIsFetching>|
+    ReturnType<typeof setTotalCount>
 
 export type userType = {
     id: number
@@ -46,38 +46,38 @@ let initialState:stateType = {
 
 
     //  AC - это сокращенно ActonCreator
-export const followAC = (userID:number) => {
+export const follow = (userID:number) => {
     return{
         type: "FOLLOW",
         userID:userID
     } as const
 }
-export const unfollowAC = (userID:number) => {
+export const unfollow = (userID:number) => {
     return{
         type: "UNFOLLOW",
         userID:userID
     } as const
 }
-export const setUsersAC = (users:Array<userType>) => {
+export const setUsers = (users:Array<userType>) => {
     return{
         type:"SET_USERS",
         users:users
     } as const
 
 }
-export const setCurrentPageAC =(currentPage:number)=>{
+export const setCurrentPage =(currentPage:number)=>{
   return{
       type:"SET-CURRENT-PAGE",
       currentPage
   } as const
 }
-export const setTotalCountAC = (totalCount:number)=>{
+export const setTotalCount = (totalCount:number)=>{
     return{
         type: "SET-TOTAL-COUNT",
         totalCount
     } as const
 }
-export const toggleIsFetchingAC = (isFetching:boolean) =>{
+export const toggleIsFetching = (isFetching:boolean) =>{
 return{
     type: "TOGGLE-IS-FETCHING",
     isFetching

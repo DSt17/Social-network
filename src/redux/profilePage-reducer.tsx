@@ -1,10 +1,12 @@
 import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
 
+
 type ActionsTypes =
     ReturnType<typeof addPostActionCreator> |
     ReturnType<typeof ChangeNewTextCallbackActionCreator> |
     ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
-    ReturnType<typeof addMessageActionCreator>
+    ReturnType<typeof addMessageActionCreator> |
+    ReturnType<typeof SetUserProfile>
 
 type PostType = {
     id: number
@@ -14,10 +16,13 @@ type PostType = {
 export type ProfilePageType = {
     messageForNewPost: string
     posts: Array<PostType>
+    profile: []
 
 }
-
-//-----------ACTION CREATOR-------- ФУНКЦИЯ КОТОРАЯ УПАКОВЫВАЕТ ДЛЯ НАС ACTION
+export type SetUserProfile = {
+    type: "SET-USER-PROFILE"
+    Profile: []
+}
 export const addPostActionCreator = () => {
     return {
         type: "ADD-POST"
@@ -30,6 +35,13 @@ export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
         NewText: NewText
     } as const
 }
+export const SetUserProfile = (Profile: []) => {
+    return {
+        type: "SET-USER-PROFILE",
+        Profile
+    }as const
+
+}
 
 
 let initialState: ProfilePageType = {
@@ -39,15 +51,15 @@ let initialState: ProfilePageType = {
         {id: 2, message: 'it\'s my first post', likesCount: 11},
         {id: 3, message: 'Blabla', likesCount: 11},
         {id: 4, message: 'Data', likesCount: 11},
-    ]
+    ],
+    profile: [],
+
 }
 
-//ЕСЛИ СТЕЙТ НЕ ПРИХОДИТ В REDUCER, ИСПОЛЬЗУЕМ ПЕРВОНОЧАЛЬНЫЕ ДАННЫЕ... initialState
 
 const profilePageReducer = (state: ProfilePageType = initialState, action: ActionsTypes): ProfilePageType => {
     switch (action.type) {
         case "ADD-POST":
-            //ДЕЛАЕМ КОПИЮ СТЕЙТА ПРАВИЛО ИММУТАБЕЛЬНОСТИ,
             let stateMessage = state.messageForNewPost
             return {
                 ...state,
@@ -56,9 +68,10 @@ const profilePageReducer = (state: ProfilePageType = initialState, action: Actio
             }
         case "CHANGE-NEW-TEXT-CALLBACK":
             return {...state, messageForNewPost: action.NewText}
+        case "SET-USER-PROFILE":
+            return {...state, profile: action.Profile}
         default:
             return state
-
     }
 
 }
