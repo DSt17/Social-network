@@ -1,6 +1,7 @@
 import {addPostActionCreator, ChangeNewTextCallbackActionCreator} from "./profilePage-reducer";
 
 
+
 type MessageType = {
     id: number
     message: string

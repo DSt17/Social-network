@@ -1,11 +1,13 @@
 
-.UsersPhoto{
+.UsersPhoto {
     height: 130px;
     width: 130px;
 }
-.selectedPage{
+
+.selectedPage {
     font-weight: bold;
 }
-.small{
- height: 100px;
+
+.Preloader {
+    height: 50px;
 }

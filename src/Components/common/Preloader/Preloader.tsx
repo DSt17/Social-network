@@ -5,7 +5,7 @@ import loader from "../../../assets/images/loader.gif";
 let Preloader = (props:any) => {
     return(
         <div>
-            <img className={s.small} src={loader}/>
+            <img className={s.Preloader} src={loader}/>
         </div>
     )
 }
