@@ -20,9 +20,9 @@ type PropsType = RouteComponentProps<PathParamsType> & OwnPropsType
 type OwnPropsType = mapStatePropsType & mapDispatchPropsType
 
 function ProfileContainer(props: PropsType) {
+
     useEffect(() => {
         let userId = props.match.params.userId
-        debugger
         if (!userId) {
             userId = "2"
         }
@@ -30,7 +30,7 @@ function ProfileContainer(props: PropsType) {
         axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId)
             .then(response => {
                 props.SetUserProfile(response.data)
-                debugger
+
             })
     }, [])
 

@@ -3,6 +3,7 @@ import profilePageReducer from "./profilePage-reducer";
 import dialogsPageReducer from "./dialogsPage-reducer";
 import sidebarReducer from "./sidebar-reducer";
 import usersPageReducer from "./usersPage-reducer";
+import authReducer from "./auth-reducer";
 
 
 
@@ -11,7 +12,8 @@ let rootReducers = combineReducers({
     profilePage: profilePageReducer,
     dialogsPage: dialogsPageReducer,
     sidebarPage: sidebarReducer,
-    usersPage: usersPageReducer
+    usersPage: usersPageReducer,
+    auth:authReducer
 }
 )
 
@@ -20,5 +22,7 @@ export type AppStateType = ReturnType <typeof rootReducers>
 
 let store = createStore(rootReducers)
 
+//@ts-ignore
+window.store = store
 
 export default store
