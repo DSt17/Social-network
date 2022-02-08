@@ -3,7 +3,6 @@ import Header from "./Header";
 import axios from "axios";
 import {connect} from "react-redux";
 import {setAuthUserData} from "../../redux/auth-reducer";
-import {AppStateType} from "../../redux/redux-store";
 
 export type HeaderContainerPropsType = {
     isAuth:boolean,

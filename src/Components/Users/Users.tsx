@@ -3,6 +3,7 @@ import s from "./users.module.css";
 import userPhoto from "../../assets/images/user.png";
 import {userType} from "../../redux/usersPage-reducer";
 import {NavLink} from "react-router-dom";
+import {usersAPI} from "../../api/api";
 
 
 type usersPropsType = {
@@ -36,16 +37,31 @@ let Users = (props: usersPropsType) => {
             props.users.map((el) => <div key={el.id}>
             <span>
                 <div>
-                    <NavLink  to={"/profile/" + el.id}>
+                    <NavLink to={"/profile/" + el.id}>
                     <img className={s.UsersPhoto} src={el.photos.small !== null ? el.photos.small : userPhoto}/>
                     </NavLink>
                 </div>
                 <div>
                     {el.followed ? <button onClick={() => {
-                            props.unFollow(el.id)
+                            usersAPI.deleteFollow(el.id)
+                                .then(data => {
+                                    if (data.resultCode === 0) {
+                                        props.unFollow(el.id)
+                                    }
+                                })
+
+
                         }}>unFollow</button>
                         : <button onClick={() => {
-                            props.follow(el.id)
+
+                            usersAPI.postFollow(el.id)
+                                .then(data => {
+                                    if (data.resultCode === 0) {
+                                        props.follow(el.id)
+                                    }
+                                })
+
+
                         }}>Follow</button>}
                 </div>
             </span>
