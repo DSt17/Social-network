@@ -1,43 +1,26 @@
 import {connect} from "react-redux";
 import {
     follow,
+     getUsersThunkCreator,
     setCurrentPage,
-    setTotalCount,
-    setUsers, toggleIsFetching,
-    unfollow,
+    toggleFollowingProgress, unFollow,
     userType
 } from "../../redux/usersPage-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import React from "react";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
-import {usersAPI} from "../../api/api";
-
 
 
 class UsersContainer extends React.Component<usersPropsType, usersPropsType> {
 
 
     componentDidMount() {
-        this.props.toggleIsFetching(true)
-        usersAPI.getUsers(this.props.currentPage,this.props.pageSize)
-            .then(data => {
-                this.props.toggleIsFetching(false)
-                this.props.setUsers(data.items)
-                this.props.setTotalCount(data.totalCount)
-            })
+        this.props.getUsers(this.props.currentPage, this.props.pageSize)
     }
 
     onPageChanged = (pageNumber: number) => {
-        this.props.toggleIsFetching(true)
-        this.props.setCurrentPage(pageNumber)
-
-        usersAPI.getUsers(pageNumber,this.props.pageSize)
-            .then(data => {
-                this.props.toggleIsFetching(false)
-                this.props.setUsers(data.items)
-
-            })
+        this.props.getUsers(pageNumber,this.props.pageSize )
     }
 
     render() {
@@ -51,6 +34,7 @@ class UsersContainer extends React.Component<usersPropsType, usersPropsType> {
                 onPageChanged={this.onPageChanged}
                 follow={this.props.follow}
                 unFollow={this.props.unFollow}
+                FollowingProgress={this.props.followingInProgress}
             />
         </>
     }
@@ -64,6 +48,7 @@ type mapStateToPropsType = {
     totalCount: number
     currentPage: number
     isFetching: boolean
+    followingInProgress: Array<any>
 }
 let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
     return {
@@ -71,55 +56,28 @@ let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
         pageSize: state.usersPage.pageSize,
         totalCount: state.usersPage.totalCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching
+        isFetching: state.usersPage.isFetching,
+        followingInProgress: state.usersPage.followingInProgress
     }
 }
 
 type mapDispatchToPropsType = {
     follow: (userID: number) => void
     unFollow: (userID: number) => void
-    setUsers: (users: Array<userType>) => void
     setCurrentPage: (currentPage: number) => void
-    setTotalCount: (totalCount: number) => void
-    toggleIsFetching: (isFetching: boolean) => void
+    toggleFollowingProgress: (isFetching: boolean, userId: number) => void
+    getUsers: (currentPage: number, pageSize: number) => void
 }
-
-/*
-let mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
-    return {
-        follow: (userID: number) => {
-            dispatch(followAC(userID))
-        },
-        unFollow: (userID: number) => {
-            dispatch(unfollowAC(userID))
-        },
-        setUsers: (users) => {
-            dispatch(setUsersAC(users))
-        },
-        setCurrentPage: (currentPage: number) => {
-            dispatch(setCurrentPageAC(currentPage))
-        },
-        setTotalCount: (totalCount: number) => {
-            dispatch(setTotalCountAC(totalCount))
-        },
-        toggleIsFetching: (isFetching: boolean) => {
-            dispatch(toggleIsFetchingAC(isFetching))
-        }
-
-    }*!/
-}
-*/
-
 
 
 const usersContainer = connect(mapStateToProps, {
-    follow:follow,
-    unFollow:unfollow,
-    setUsers:setUsers,
-    setCurrentPage: setCurrentPage,
-    setTotalCount: setTotalCount,
-    toggleIsFetching:toggleIsFetching
-}
-)(UsersContainer)
+        follow: follow,
+        unFollow: unFollow,
+        setCurrentPage: setCurrentPage,
+        toggleFollowingProgress: toggleFollowingProgress,
+        getUsers: getUsersThunkCreator
+    }
+)
+(UsersContainer)
 
 export default usersContainer

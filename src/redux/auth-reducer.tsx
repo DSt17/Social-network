@@ -1,3 +1,5 @@
+import {headerAPI} from "../api/api";
+
 const SET_USER_DATA = "SET_USER_DATA"
 
 
@@ -8,6 +10,7 @@ let initialState = {
     isAuth: false
 }
 
+export type ActionsTypes = ReturnType<typeof setAuthUserData>
 
 const authReducer = (state = initialState, action: ActionsTypes) => {
     switch (action.type) {
@@ -23,8 +26,7 @@ const authReducer = (state = initialState, action: ActionsTypes) => {
 
 }
 
-export type ActionsTypes = ReturnType<typeof setAuthUserData>
-
+//AC
 export const setAuthUserData = (userId: number, email: string, login: string) => {
     return {
         type: SET_USER_DATA,
@@ -33,6 +35,19 @@ export const setAuthUserData = (userId: number, email: string, login: string) =>
             email,
             login
         }
+    }
+}
+
+//thunkCreator
+export const getHeader = () => {
+    return (dispatch:any) => {
+        headerAPI.getHeader()
+            .then(data => {
+                if (data.resultCode === 0) {
+                    let {id, login, email} = data.data
+                    dispatch (setAuthUserData(id, email, login))
+                }
+            })
     }
 }
 
