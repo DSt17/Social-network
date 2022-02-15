@@ -2,9 +2,14 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import s from "./Header.module.css";
 
-const Header = (props:any) => {
+
+type HeaderPropsType = {
+    isAuth: boolean,
+    login: string,
+}
+const Header = (props:HeaderPropsType) => {
     return <header className={s.header}>
-        <img
+        <img alt={"header-img"}
             src={"https://juniortech.org/wp-content/uploads/2019/09/invention-camp-300x300px-2x.png"}/>
         <div className={s.loginBlock}>
             {props.isAuth ?

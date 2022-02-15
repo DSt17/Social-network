@@ -1,4 +1,4 @@
-import {headerAPI, usersAPI} from "../api/api";
+import {usersAPI} from "../api/api";
 
 export type ActionsTypes =
     ReturnType<typeof followSuccess> |
@@ -153,9 +153,8 @@ export const follow = (Userid: number) => {
             })
     }
 }
-
+//thunkCreator
 export const unFollow = (UserId: number) => {
-
     return (dispatch: any) => {
         dispatch(toggleFollowingProgress(true, UserId))
         usersAPI.unFollow(UserId)

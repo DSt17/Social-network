@@ -1,19 +1,18 @@
 import React, {useEffect} from "react";
 import Header from "./Header";
 import {connect} from "react-redux";
-import {getHeader} from "../../redux/auth-reducer";
+import {getAuthUserData} from "../../redux/auth-reducer";
 
 export type HeaderContainerPropsType = {
     isAuth: boolean,
     login: string,
-    getHeader:()=>void
+    getAuthUserData:()=>void
 }
 
 function HeaderContainer(props: HeaderContainerPropsType) {
     useEffect(() => {
-        props.getHeader()
+        props.getAuthUserData()
     })
-
 
     return <Header {...props}/>
 
@@ -25,4 +24,4 @@ const mapStateToProps = (state: any) => ({
     login: state.auth.login
 })
 
-export default connect(mapStateToProps, {getHeader})(HeaderContainer)
+export default connect(mapStateToProps, {getAuthUserData})(HeaderContainer)

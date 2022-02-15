@@ -1,4 +1,5 @@
 import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
+import {usersAPI} from "../api/api";
 
 
 type ActionsTypes =
@@ -35,7 +36,7 @@ export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
         NewText: NewText
     } as const
 }
-export const SetUserProfile = (Profile: []) => {
+ const SetUserProfile = (Profile: []) => {
     return {
         type: "SET-USER-PROFILE",
         Profile
@@ -74,6 +75,17 @@ const profilePageReducer = (state: ProfilePageType = initialState, action: Actio
             return state
     }
 
+}
+
+
+//Thunk
+export const getUserProfile = (userId:string)=>{
+    return (dispatch:any)=>{
+        usersAPI.getUserProfile(userId)
+            .then(response => {
+                dispatch(SetUserProfile(response.data))
+            })
+    }
 }
 
 export default profilePageReducer

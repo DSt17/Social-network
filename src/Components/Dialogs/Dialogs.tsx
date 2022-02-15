@@ -30,6 +30,7 @@ const Dialogs = (props: DialogsPropsType) => {
         props.newMessageChangeHandler(e.currentTarget.value)
     }
 
+
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>

@@ -6,6 +6,7 @@ import usersPageReducer from "./usersPage-reducer";
 import authReducer from "./auth-reducer";
 import thunkMiddleware from "redux-thunk"
 
+export type AppStateType = ReturnType <typeof rootReducers>
 
 
 // combineReducers - это функция которая объединяет reducer-ы
@@ -14,12 +15,11 @@ let rootReducers = combineReducers({
     dialogsPage: dialogsPageReducer,
     sidebarPage: sidebarReducer,
     usersPage: usersPageReducer,
-    auth:authReducer
+    auth: authReducer
 }
 )
 
 
-export type AppStateType = ReturnType <typeof rootReducers>
 
 let store = createStore(rootReducers,applyMiddleware(thunkMiddleware))
 

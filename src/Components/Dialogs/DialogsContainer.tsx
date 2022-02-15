@@ -1,4 +1,4 @@
-
+import React from "react";
 import {
     addMessageActionCreator,
     ChangeNewMessageCallbackActionCreator,
@@ -9,15 +9,20 @@ import {connect} from "react-redux";
 import {AppStateType} from "../../redux/redux-store";
 import {Dispatch} from "redux";
 
+import {WithAuthRedirect} from "../../hoc/WithAuthRedirect";
+
 
 export type DialogsPropsType = mapStateToPropsType & mapDispatchToPropsType
 
+
 type mapStateToPropsType = {
-    dialogsPage: DialogPageType
+    dialogsPage: DialogPageType,
 }
+
+
 let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
     return {
-        dialogsPage: state.dialogsPage
+        dialogsPage: state.dialogsPage,
     }
 }
 
@@ -36,7 +41,10 @@ let mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
     }
 }
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs)
+let AuthRedirectComponent = WithAuthRedirect(Dialogs)
+
+
+const DialogsContainer =  connect(mapStateToProps, mapDispatchToProps)(AuthRedirectComponent)
 
 
 export default DialogsContainer;
