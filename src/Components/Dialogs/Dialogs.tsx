@@ -1,9 +1,8 @@
 import React, {ChangeEvent} from "react";
 import s from './Dialogs.module.css'
-import Dialogsitem from "./Dialogitem/Dialogsitem";
+import DialogsItem from "./Dialogitem/Dialogsitem";
 import Message from "./Message/Message";
 import {DialogsPropsType} from "./DialogsContainer";
-
 
 
 const Dialogs = (props: DialogsPropsType) => {
@@ -11,16 +10,16 @@ const Dialogs = (props: DialogsPropsType) => {
     let state = props.dialogsPage
 
     let dialogsElements = state.dialogs.map(d =>
-        <Dialogsitem
-        name={d.name}
-        id={d.id}/>)
+        <DialogsItem
+            name={d.name}
+            id={d.id}/>)
 
     let messagesElements = state.messages.map(m =>
         <Message
             message={m.message}/>)
 
     const OnAddMessage = () => {
-        if(state.messageForNewMessage.trim() !== ""){
+        if (state.messageForNewMessage.trim() !== "") {
             props.addMessage()
         }
 

@@ -1,5 +1,5 @@
 import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
-import {usersAPI} from "../api/api";
+import {ProfileAPI, usersAPI} from "../api/api";
 
 
 type ActionsTypes =
@@ -7,7 +7,9 @@ type ActionsTypes =
     ReturnType<typeof ChangeNewTextCallbackActionCreator> |
     ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
     ReturnType<typeof addMessageActionCreator> |
-    ReturnType<typeof SetUserProfile>
+    ReturnType<typeof SetUserProfile> |
+    ReturnType<typeof SetStatus> |
+    ReturnType<typeof UpdateStatus>
 
 type PostType = {
     id: number
@@ -18,6 +20,7 @@ export type ProfilePageType = {
     messageForNewPost: string
     posts: Array<PostType>
     profile: []
+    status: string
 
 }
 export type SetUserProfile = {
@@ -36,12 +39,23 @@ export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
         NewText: NewText
     } as const
 }
- const SetUserProfile = (Profile: []) => {
+const SetUserProfile = (Profile: []) => {
     return {
         type: "SET-USER-PROFILE",
         Profile
-    }as const
-
+    } as const
+}
+const SetStatus = (status: string) => {
+    return {
+        type: "SET-STATUS",
+        status
+    } as const
+}
+const UpdateStatus = (status: string) => {
+    return {
+        type: "UPDATE-STATUS",
+        status
+    } as const
 }
 
 
@@ -54,6 +68,7 @@ let initialState: ProfilePageType = {
         {id: 4, message: 'Data', likesCount: 11},
     ],
     profile: [],
+    status: ""
 
 }
 
@@ -69,6 +84,10 @@ const profilePageReducer = (state: ProfilePageType = initialState, action: Actio
             }
         case "CHANGE-NEW-TEXT-CALLBACK":
             return {...state, messageForNewPost: action.NewText}
+        case "SET-STATUS":
+            return {...state, status: action.status}
+        case "UPDATE-STATUS":
+            return {...state, status: action.status}
         case "SET-USER-PROFILE":
             return {...state, profile: action.Profile}
         default:
@@ -79,11 +98,31 @@ const profilePageReducer = (state: ProfilePageType = initialState, action: Actio
 
 
 //Thunk
-export const getUserProfile = (userId:string)=>{
-    return (dispatch:any)=>{
+export const getUserProfile = (userId: string) => {
+    return (dispatch: any) => {
         usersAPI.getUserProfile(userId)
             .then(response => {
                 dispatch(SetUserProfile(response.data))
+            })
+    }
+}
+
+export const getStatus = (userId: string) => {
+    return (dispatch: any) => {
+        ProfileAPI.getStatus(userId)
+            .then(response => {
+                dispatch(SetStatus(response.data))
+            })
+    }
+}
+
+export const updateStatus = (status: string) => {
+    return (dispatch: any) => {
+        ProfileAPI.updateStatus(status)
+            .then((response) => {
+                if (response.data.resultCode === 0) {
+                    dispatch(UpdateStatus(status))
+                }
             })
     }
 }

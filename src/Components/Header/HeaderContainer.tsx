@@ -6,7 +6,7 @@ import {getAuthUserData} from "../../redux/auth-reducer";
 export type HeaderContainerPropsType = {
     isAuth: boolean,
     login: string,
-    getAuthUserData:()=>void
+    getAuthUserData: () => void
 }
 
 function HeaderContainer(props: HeaderContainerPropsType) {

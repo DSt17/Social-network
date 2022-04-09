@@ -9,7 +9,7 @@ type initialStateType = {
     isAuth: boolean
 }
 
-let initialState:initialStateType = {
+let initialState: initialStateType = {
     userId: null,
     email: null,
     login: null,
@@ -17,10 +17,9 @@ let initialState:initialStateType = {
 }
 
 
-
 export type ActionsTypes = ReturnType<typeof setAuthUserData>
 
-const authReducer = (state = initialState, action: ActionsTypes):initialStateType => {
+const authReducer = (state = initialState, action: ActionsTypes): initialStateType => {
     switch (action.type) {
         case SET_USER_DATA:
             return {
@@ -48,15 +47,24 @@ export const setAuthUserData = (userId: string, email: string, login: string) =>
 
 //thunkCreator
 export const getAuthUserData = () => {
-    return (dispatch:any) => {
+    return (dispatch: any) => {
         authAPI.me()
             .then(data => {
                 if (data.resultCode === 0) {
                     let {id, login, email} = data.data
-                    dispatch (setAuthUserData(id, email, login))
+                    dispatch(setAuthUserData(id, email, login))
                 }
             })
     }
 }
+
+// export const loginUser = (email: string, password: string, rememberMe: boolean) => {
+//     return (dispatch: any) => {
+//         authAPI.login(email, password, rememberMe)
+//             .then(response => {
+//
+//             })
+//     }
+// }
 
 export default authReducer
