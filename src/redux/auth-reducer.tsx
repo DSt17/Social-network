@@ -1,4 +1,5 @@
 import {authAPI} from "../api/api";
+import {Dispatch} from "redux";
 
 const SET_USER_DATA = "SET_USER_DATA"
 
@@ -47,7 +48,7 @@ export const setAuthUserData = (userId: string, email: string, login: string) =>
 
 //thunkCreator
 export const getAuthUserData = () => {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         authAPI.me()
             .then(data => {
                 if (data.resultCode === 0) {

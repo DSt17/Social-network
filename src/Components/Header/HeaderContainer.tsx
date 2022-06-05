@@ -10,6 +10,7 @@ export type HeaderContainerPropsType = {
 }
 
 function HeaderContainer(props: HeaderContainerPropsType) {
+
     useEffect(() => {
         props.getAuthUserData()
     })
@@ -17,7 +18,6 @@ function HeaderContainer(props: HeaderContainerPropsType) {
     return <Header {...props}/>
 
 }
-
 
 const mapStateToProps = (state: any) => ({
     isAuth: state.auth.isAuth,

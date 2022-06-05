@@ -27,13 +27,13 @@ const LoginForm: React.FC<InjectedFormProps<formDataType>> = (props) => {
     )
 }
 
-const LoginReduxForm = reduxForm<formDataType>({form: 'login'})(LoginForm)
+const LoginReduxForm = reduxForm<formDataType>({form: 'login'})(LoginForm) // каждая форма должна иметь уникальное строковое имя (form: 'login')
+
 
 const Login = () => {
     const onSubmit = (formData: formDataType) => {
         console.log(formData)
     }
-
     return <div>
         <h1>Login</h1>
         <LoginReduxForm onSubmit={onSubmit} />

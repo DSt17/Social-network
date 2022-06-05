@@ -1,4 +1,4 @@
-import {addPostActionCreator, ChangeNewTextCallbackActionCreator} from "./profilePage-reducer";
+import {addPostActionCreator} from "./profilePage-reducer";
 
 
 
@@ -11,32 +11,23 @@ type DialogsType = {
     name: string
 }
 export type ActionsTypes = ReturnType<typeof addPostActionCreator> |
-    ReturnType<typeof ChangeNewTextCallbackActionCreator> |
-    ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
     ReturnType<typeof addMessageActionCreator>
 
 export type DialogPageType = {
     messages: Array<MessageType>
     dialogs: Array<DialogsType>
-    messageForNewMessage: string
 }
 
 
 //-----------ACTION CREATOR-------- ФУНКЦИЯ КОТОРАЯ УПАКОВЫВАЕТ ДЛЯ НАС ACTION
-export const addMessageActionCreator = () => {
+export const addMessageActionCreator = (newMessage: string) => {
     return {
         type: "ADD-MESSAGE",
-    } as const
-}
-export const ChangeNewMessageCallbackActionCreator = (NewMessage: string) => {
-    return {
-        type: "CHANGE-NEW-MESSAGE-CALLBACK",
-        NewMessage: NewMessage
+        newMessage
     } as const
 }
 
 let initialState: DialogPageType = {
-    messageForNewMessage: "",
     messages: [
         {id: 1, message: 'Hi'},
         {id: 2, message: 'How is your it-kamasutra?'},
@@ -56,14 +47,9 @@ let initialState: DialogPageType = {
 
 const dialogsPageReducer = (state: DialogPageType = initialState, action: ActionsTypes): DialogPageType => {
     switch (action.type) {
-        case "CHANGE-NEW-MESSAGE-CALLBACK":
-            return {...state, messageForNewMessage: action.NewMessage}
         case "ADD-MESSAGE":
-            let body = state.messageForNewMessage
             return {
-                ...state,
-                messageForNewMessage: "",
-                messages: [...state.messages, {id: new Date().getTime(), message: body}],
+                ...state, messages: [...state.messages, {id: new Date().getTime(), message: action.newMessage}],
             }
         default:
             return state

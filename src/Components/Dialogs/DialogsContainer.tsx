@@ -1,6 +1,5 @@
 import {
     addMessageActionCreator,
-    ChangeNewMessageCallbackActionCreator,
     DialogPageType,
 } from "../../redux/dialogsPage-reducer";
 import Dialogs from "./Dialogs";
@@ -27,17 +26,13 @@ let mapStateToProps = (state: AppStateType): mapStateToPropsType => {
 }
 
 type mapDispatchToPropsType = {
-    addMessage: () => void
-    newMessageChangeHandler: (text: string) => void
+    addMessage: (newMessage: string) => void
 }
 let mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
     return {
-        addMessage: () => {
-            dispatch(addMessageActionCreator())
-        },
-        newMessageChangeHandler: (text: string) => {
-            dispatch(ChangeNewMessageCallbackActionCreator(text))
-        },
+        addMessage: (newMessage: string) => {
+            dispatch(addMessageActionCreator(newMessage))
+        }
     }
 }
 

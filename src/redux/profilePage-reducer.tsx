@@ -1,11 +1,9 @@
-import {addMessageActionCreator, ChangeNewMessageCallbackActionCreator} from "./dialogsPage-reducer";
+import {addMessageActionCreator} from "./dialogsPage-reducer";
 import {ProfileAPI, usersAPI} from "../api/api";
 
 
 type ActionsTypes =
     ReturnType<typeof addPostActionCreator> |
-    ReturnType<typeof ChangeNewTextCallbackActionCreator> |
-    ReturnType<typeof ChangeNewMessageCallbackActionCreator> |
     ReturnType<typeof addMessageActionCreator> |
     ReturnType<typeof SetUserProfile> |
     ReturnType<typeof SetStatus> |
@@ -17,28 +15,18 @@ type PostType = {
     likesCount: number
 }
 export type ProfilePageType = {
-    messageForNewPost: string
     posts: Array<PostType>
     profile: []
     status: string
+}
 
-}
-export type SetUserProfile = {
-    type: "SET-USER-PROFILE"
-    Profile: []
-}
-export const addPostActionCreator = () => {
+export const  addPostActionCreator = (textPost: string) => {
     return {
-        type: "ADD-POST"
-        // postMessage: postMessage
+        type: "ADD-POST",
+        textPost
     } as const
 }
-export const ChangeNewTextCallbackActionCreator = (NewText: string) => {
-    return {
-        type: "CHANGE-NEW-TEXT-CALLBACK",
-        NewText: NewText
-    } as const
-}
+
 const SetUserProfile = (Profile: []) => {
     return {
         type: "SET-USER-PROFILE",
@@ -60,7 +48,6 @@ const UpdateStatus = (status: string) => {
 
 
 let initialState: ProfilePageType = {
-    messageForNewPost: "",
     posts: [
         {id: 1, message: 'Hi, how are you?', likesCount: 12},
         {id: 2, message: 'it\'s my first post', likesCount: 11},
@@ -76,14 +63,10 @@ let initialState: ProfilePageType = {
 const profilePageReducer = (state: ProfilePageType = initialState, action: ActionsTypes): ProfilePageType => {
     switch (action.type) {
         case "ADD-POST":
-            let stateMessage = state.messageForNewPost
             return {
                 ...state,
-                posts: [...state.posts, {id: new Date().getTime(), message: stateMessage, likesCount: 0}],
-                messageForNewPost: ""
+                posts: [...state.posts, {id: new Date().getTime(), message: action.textPost, likesCount: 0}]
             }
-        case "CHANGE-NEW-TEXT-CALLBACK":
-            return {...state, messageForNewPost: action.NewText}
         case "SET-STATUS":
             return {...state, status: action.status}
         case "UPDATE-STATUS":
